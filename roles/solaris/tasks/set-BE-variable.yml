@@ -1,0 +1,4 @@
+- name: Setting BE variable
+  debug:
+    msg: BE variable is set to {{ BE_NAME }}
+    

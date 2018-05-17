@@ -1,0 +1,8 @@
+- name: disabling puppet agent
+  shell: /usr/sbin/puppet agent --disable "disabling for OS patching"
+  register: puppetagentstatus
+
+- name: Fail if the puppet agent is not diabled
+  fail:
+    msg: puppet agent is still running, Exisiting
+  when: puppetagentstatus.rc != 1

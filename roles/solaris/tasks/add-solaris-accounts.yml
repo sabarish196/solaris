@@ -1,0 +1,29 @@
+- name: Add ocm to /etc/passwd
+  copy:
+    src: "{{ role_path}}/files/ocm"
+    dest: /etc/passwd
+    backup: yes
+
+- name: validating the /etc/passwd file for ocm
+  shell: grep ocm /etc/passwd
+  register: ocm
+
+- name: Fail if ocm is not foun
+  fail:
+    msg: ocm is not found in the /etc/passwd, failing
+  when: ocm.rc != 0
+
+- name: Add openldap to /etc/passwd
+  copy:
+    src: "{{ role_path}}/files/openldap"
+    dest: /etc/passwd
+    backup: yes
+
+- name: validating the /etc/passwd file for openldap
+  shell: grep openldap /etc/passwd
+  register: openldap
+
+- name: Fail if openldap is not foun
+  fail:
+    msg: openldap is not found in the /etc/passwd, failing
+  when: openldap.rc != 0

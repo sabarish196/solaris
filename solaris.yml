@@ -1,0 +1,15 @@
+---
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Exit is user is not root
+      shell: whoami
+      register: status
+
+    - name: fail if not root
+      fail:
+        msg: user is not root exiting the playbook
+      when: status.stdout != root
+  

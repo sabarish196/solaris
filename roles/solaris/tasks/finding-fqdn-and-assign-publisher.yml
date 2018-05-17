@@ -1,0 +1,7 @@
+- name: Finding teh FQDN of the host
+  shell: /usr/sbin/host `hostname` | awk '{print $1}' | cut -d"." -f2
+  register: FQDN
+
+- name: FQDN of the host is
+  debug:
+    msg: "{{ FQDN.stdout }}"

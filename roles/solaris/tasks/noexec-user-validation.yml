@@ -1,0 +1,27 @@
+- name: checking wether  noexec_user is commented or not
+  shell: grep  '^set noexec_user' /etc/system
+  register: userstatus
+
+- name: checking if set noexec_usern is commnetd or not
+  debug:
+    msg: set noexec_user  is commented, continueing
+  when: userstatus.rc == 1
+
+- name: comment the line if it is not commented
+  lineinfile:
+    path: /etc/system
+    backup: yes
+    regexp: '^set noexec_user_stack=1'
+    insertbefore: '^set noexec_user_stack=1'
+    line: '#set noexec_user_stack=1'
+    state: present
+  when: userstatus.rc == 0
+
+- name: checking wether  noexec_user is commented or not
+  shell: grep  '^set noexec_user' /etc/system
+  register: newstatus
+
+- name: fail if the line is not commented out
+  fail:
+    msg: "set noexec_user is not commented out"
+  when: newstatus.rc == 1
