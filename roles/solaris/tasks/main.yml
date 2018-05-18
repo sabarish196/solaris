@@ -1,2 +1,7 @@
 ---
-# tasks file for solaris
+- import_tasks: disable-puppet-agent.yml
+- import_tasks: add-solaris-accounts.yml
+- import_tasks: noexec-user-validation.yml
+- import_tasks: set-BE-variable.yml
+- import_tasks: finding-fqdn-and-assign-publisher.yml
+- import_tasks: enable-puppet-agent.yml

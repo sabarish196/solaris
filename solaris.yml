@@ -12,4 +12,6 @@
       fail:
         msg: user is not root exiting the playbook
       when: status.stdout != root
-  
+
+  roles:
+    - Solaris
