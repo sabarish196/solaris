@@ -1,1 +1,1 @@
-<ADD SERVER TO BE PATCHED>
+localhost ansible_connection=local
