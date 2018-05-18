@@ -5,3 +5,98 @@
 - name: FQDN of the host is
   debug:
     msg: "{{ FQDN.stdout }}"
+
+- name: check the PUBLISHER for FDQN
+  shell: PUBLISHER=http://10.75.28.46/
+  register: PUBLISHER
+  when: FQDN.stdout == "slc"
+
+- name: debug output
+  debug:
+    msg: "PUBLISHER=http://10.75.28.46/"
+  when: FQDN.stdout == "slc"
+
+- name: check the PUBLISHER for FDQN
+  shell: PUBLISHER=http://10.75.28.46/
+  register: PUBLISHER
+  when: FQDN.stdout == "ccg11"
+
+- name: debug output
+  debug:
+    msg: "PUBLISHER=http://10.75.28.46/"
+  when: FQDN.stdout == "ccg11"
+
+- name: check the PUBLISHER for FDQN
+  shell: PUBLISHER=http://10.75.28.46/
+  register: PUBLISHER
+  when: FQDN.stdout == "ccg12"
+
+
+- name: debug output
+  debug:
+    msg: "PUBLISHER=http://10.75.28.46/"
+  when: FQDN.stdout == "ccg12"
+
+- name: check the PUBLISHER for FDQN
+  shell: PUBLISHER=http://10.190.118.32/
+  register: PUBLISHER
+  when: FQDN.stdout == "phx"
+
+- name: debug output
+  debug:
+    msg: "PUBLISHER=http://10.190.118.32/"
+  when: FQDN.stdout == "phx"
+
+- name: check the PUBLISHER for FDQN
+  shell: PUBLISHER=http://10.190.118.32/
+  register: PUBLISHER
+  when: FQDN.stdout == "ccg01"
+
+- name: debug output
+  debug:
+    msg: "PUBLISHER=http://10.75.28.46/"
+  when: FQDN.stdout == "ccg01"
+
+- name:  grab what the host is pointing to for publisher
+  shell: pkg publisher | awk '{ print $5 }' | tail -1
+  register: HOST_PUBLISHER
+
+- name: validate HOST_PUBLISHER matches publisher, if not fail
+  fail:
+    msg: HOST_PUBLISHER dosent matches publisher host
+  when: PUBLISHER.stdout != HOST_PUBLISHER.stdout
+
+- name: publisher is correct or not
+  debug:
+    msg: "publisher is correct"
+  when: PUBLISHER.stdout == HOST_PUBLISHER.stdout
+
+- name: validate if there is already a BE with name of {{ BE_NAME }}
+  shell: beadm list | grep {{ BE_NAME }}
+  register: beadmstatus
+
+- name: fail if there is already a BE with name of {{ BE_NAME }}
+  fail:
+    msg: there is already a BE with name of {{ BE_NAME }}
+  when: beadmstatus.rc == 0
+
+- name: Upgrade zfs if needed
+  shell: zfs upgrade -a
+  when: beadmstatus.rc != 0
+
+- name: Upgrade zpool if needed
+  shell: zpool upgrade -a
+  when: beadmstatus.rc != 0
+
+- name: patch the server
+  shell: pkg update --accept --be-name {{ BE_NAME }}
+  when: beadmstatus.rc != 0
+
+- name: Pause for 15 seconds
+  pause:
+    seconds: 30
+    prompt: wait you to check if all went good or not
+
+- name: prints if node  is reday to power off
+  debug:
+    msg: "The node is now ready to power down for SysFW after DBA stops the instance - coordinate that with them"

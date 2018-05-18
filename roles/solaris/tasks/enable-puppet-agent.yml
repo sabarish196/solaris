@@ -1,0 +1,8 @@
+- name: enable puppet agent
+  shell: /usr/sbin/puppet agent --enable "enabling after OS patching"
+  register: puppetagentstatus
+
+- name: Fail if the puppet agent is not reenabled
+  fail:
+    msg: puppet agent is still notrunning, Exisiting
+  when: puppetagentstatus.rc != 1
