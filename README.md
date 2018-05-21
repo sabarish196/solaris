@@ -8,6 +8,6 @@ for any doubts/issues contact ravindra
 
 to prompt for sudo password 
 run playbook with --ask-sudo-pass option at the end.
-ex. ansible-palybook -i hosts test.yml --ask-sudo-pass
+ex. ansible-palybook -i hosts test.yml --ask-become-pass
 
 
