@@ -1,6 +1,6 @@
 - name: Add ocm to /etc/passwd
   copy:
-    src: "{{ role_path}}/files/ocm"
+    src: "{{ role_path }}/files/ocm"
     dest: /etc/passwd
     backup: yes
 
@@ -15,7 +15,7 @@
 
 - name: Add openldap to /etc/passwd
   copy:
-    src: "{{ role_path}}/files/openldap"
+    src: "{{ role_path }}/files/openldap"
     dest: /etc/passwd
     backup: yes
 
